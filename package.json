@@ -1,0 +1,12 @@
+{
+  "name": "node-web-scrape",
+  "main": "server.js",
+
+  "dependencies": {
+    "cheerio": "latest",
+    "express": "latest",
+    "mongodb": "^3.1.4",
+    "nodemon": "^1.18.3",
+    "request": "latest"
+  }
+}
