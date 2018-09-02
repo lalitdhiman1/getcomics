@@ -1,7 +1,6 @@
 {
   "name": "node-web-scrape",
   "main": "server.js",
-
   "dependencies": {
     "cheerio": "latest",
     "express": "latest",
