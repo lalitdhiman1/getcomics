@@ -1,11 +1,14 @@
 {
   "name": "node-web-scrape",
   "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
   "dependencies": {
     "cheerio": "latest",
     "express": "latest",
     "mongodb": "^3.1.4",
-    "nodemon": "^1.18.3",
+    "nodemon": "^1.18.4",
     "request": "latest"
   }
 }

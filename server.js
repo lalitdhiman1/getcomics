@@ -18,8 +18,8 @@ app.get('/com', function(req, res){
       var counter = 1;
       $('.two_column_item a').filter(function(){
          var imgUrl = $(this).attr('href');
-         var imgSrc = $(this).children().children().attr("src")
-         var imgTitle = $(this).attr("title")
+         var imgSrc = $(this).children().children().attr("src");
+         var imgTitle = $(this).attr("title");
 
          if(imgSrc){
          imgSrc = imgSrc.split("?").map(function (val) {
@@ -29,16 +29,18 @@ app.get('/com', function(req, res){
           return val;
          });
 
-         jsonTitle = counter;
-         console.log(jsonTitle);
-         //jsonTitle = jsonTitle[1];
+         jsonTitle = imgTitle;
+         // console.log(jsonTitle[1].toLowerCase().replace(/ /g,'-'));
+         // return
+         jsonTitle = jsonTitle[1].toLowerCase().replace(/ /g,'-');
 
          json.comicsTitle.push({"src":imgSrc[0], "title": imgTitle[1], "url":imgUrl})
-
-         getDataForComics(imgUrl, jsonTitle);
-         counter++
+         console.log(json);
+         return false;
+         //getDataForComics(imgUrl, jsonTitle);
 
          }
+         
        })
     }
 res.send(json)
@@ -56,7 +58,8 @@ function getDataForComics($url, $title){
   url = $url;
   comicTitle = $title;
 
-console.log($url,comicTitle)
+//console.log($url,comicTitle)
+
    request(url, function(error, response, html){
      if(!error){
        var $ = cheerio.load(html);
@@ -66,7 +69,6 @@ console.log($url,comicTitle)
        var html="";
        $('.gallery .gallery-item a img').filter(function(){
          var srcLength = $(this).length;
-         console.log(srcLength);
          var $imgSrc = $(this).attr('src');
              $imgSrc = $imgSrc.split('?');
          var $comma = ",";
@@ -75,8 +77,10 @@ console.log($url,comicTitle)
          }
         })
      }
- //res.send(json)
-     fs.writeFile(comicTitle+'.json', JSON.stringify(json, null, 4), function(err){
+     console.log(comicTitle+"------------")
+     return
+// res.send(json)
+     fs.writeFile(comicTitle, JSON.stringify(json, null, 4), function(err){
        console.log('File successfully written! - Check your project directory for the '+comicTitle+'.json file');
      })
 
