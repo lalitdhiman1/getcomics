@@ -3,6 +3,34 @@ var fs      = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
 var app     = express();
+var mysql = require('mysql');
+var db = require("./data/data");
+const bodyParser = require('body-parser');
+
+//console.log(db)
+
+
+var con = mysql.createConnection(db);
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+app.get('/getMainComics', function (req, res) {
+    con.query('SELECT * FROM mainprofile', function (error, results, fields) {
+        if (error) throw error;
+        return res.send({ data: results});
+    });
+});
+
+
+
 
 app.get('/com', function(req, res){
   url = 'http://www.sjcomics.com/category/raj-comics/bankelal-comics/';
@@ -28,13 +56,19 @@ app.get('/com', function(req, res){
          imgTitle = imgTitle.split("to: ").map(function (val) {
           return val;
          });
-
-         jsonTitle = imgTitle;
-         // console.log(jsonTitle[1].toLowerCase().replace(/ /g,'-'));
-         // return
-         jsonTitle = jsonTitle[1].toLowerCase().replace(/ /g,'-');
-
-         json.comicsTitle.push({"src":imgSrc[0], "title": imgTitle[1], "url":imgUrl})
+         if(imgUrl){
+         imgUrl = imgUrl.split(".com").map(function (val) {
+          return val;
+         });
+       }
+          var post = {
+            src:imgSrc[0],
+            title: imgTitle[1],
+            url:imgUrl[1]
+          };
+  
+ 
+var query = con.query('INSERT INTO mainprofile SET ?', post, function(err, result) {console.log(result); });
          console.log(json);
          return false;
          //getDataForComics(imgUrl, jsonTitle);
@@ -52,11 +86,15 @@ res.send(json)
 })
 
 
-function getDataForComics($url, $title){
+//function getDataForComics($url, $title){
  //
- // app.get('/comics', function(req, res){
-  url = $url;
-  comicTitle = $title;
+  app.get('/getcom/:id/:comic', function(req, res){
+      let id = "http://www.sjcomics.com/"+req.params.id;
+      let url = "http://www.sjcomics.com/"+req.params.comic;
+     // var sql = "CREATE TABLE `comics`.`"+req.params.id+"` ( `id` INT NOT NULL AUTO_INCREMENT , `img` TEXT NOT NULL, PRIMARY KEY (`id`))";
+     // con.query(sql)
+  // url = $url;
+  // comicTitle = $title;
 
 //console.log($url,comicTitle)
 
@@ -73,22 +111,32 @@ function getDataForComics($url, $title){
              $imgSrc = $imgSrc.split('?');
          var $comma = ",";
          for(var i=0; i < srcLength; i++){
-          json.comics.push({"imgSrc":$imgSrc[0]});
+
+          //json.comics.push({"imgSrc":$imgSrc[0]});
+          var post = {
+            img: $imgSrc[0]
+          } 
+          console.log(post) 
+          var query = con.query('INSERT INTO `23` SET ?', post, function(err, result) {console.log(result); });
          }
         })
      }
-     console.log(comicTitle+"------------")
-     return
-// res.send(json)
-     fs.writeFile(comicTitle, JSON.stringify(json, null, 4), function(err){
-       console.log('File successfully written! - Check your project directory for the '+comicTitle+'.json file');
+
+       
+       
+       
+     console.log(json)
+     
+ res.send(json)
+     fs.writeFile("comicTitle", JSON.stringify(json, null, 4), function(err){
+       console.log('File successfully written!');
      })
 
 
    })
- //})
+ })
 
-}
+
 
 
 

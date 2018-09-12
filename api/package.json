@@ -5,9 +5,11 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
+    "body-parser": "^1.18.3",
     "cheerio": "latest",
     "express": "latest",
     "mongodb": "^3.1.4",
+    "mysql": "^2.16.0",
     "nodemon": "^1.18.4",
     "request": "latest"
   }
