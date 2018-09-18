@@ -8,9 +8,11 @@
     "body-parser": "^1.18.3",
     "cheerio": "latest",
     "express": "latest",
+    "mkdirp": "^0.5.1",
     "mongodb": "^3.1.4",
     "mysql": "^2.16.0",
     "nodemon": "^1.18.4",
+    "path": "^0.12.7",
     "request": "latest"
   }
 }

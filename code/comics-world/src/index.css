@@ -1,5 +1,21 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Mono');
+
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+font-family: 'PT Mono', monospace;
+}
+
+.thumbs{
+	width: 150px;
+	float: left;
+	font-size: 14px;
+	min-height: 300px;
+	margin: 10px;
+}
+
+.thumbs img{width: 100%}
+.thumbs a{
+	color: #000;
+	text-decoration: none;
 }
