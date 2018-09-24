@@ -7,10 +7,11 @@ lib-cov
 *.pid
 *.gz
 
-downloaded_comics
-data
+api/downloaded_comics
+api/data
 pids
 logs
 results
 npm-debug.log
 node_modules
+api/downloaded_comics - Copy/

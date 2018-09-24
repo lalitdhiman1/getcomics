@@ -9,6 +9,8 @@ var _URL = require("./data/comics");
 var bodyParser = require('body-parser');
 var path = require("path");
 var mkdirp = require('mkdirp');
+var Sitemapper = require('sitemapper');
+ 
 
 
 var con = mysql.createConnection(db);
@@ -41,12 +43,18 @@ app.use(bodyParser.urlencoded({
 
 
 app.get('/getAllComics', function (req, res) {
-    con.query('SELECT * FROM all_comics', function (error, results, fields) {
+    con.query('SELECT * FROM all_comics_url', function (error, results, fields) {
         if (error) throw error;
         return res.send({ data: results});
     });
 });
 
+app.get('/getAllComicsUrl', function (req, res) {
+    con.query('SELECT * FROM all_comics_url', function (error, results, fields) {
+        if (error) throw error;
+        return res.send({ data: results});
+    });
+});
 
 
 app.get('/getMainComics', function (req, res) {
@@ -188,6 +196,32 @@ $('.page_nav_wrap ul li:nth-last-child(2)').filter(function(){
 
 
 
+app.get('/all_comics_url/', function(req, res){
+  url = _URL.allUrl;
+console.log(url)
+
+var sitemap = new Sitemapper();
+ 
+sitemap.fetch(url).then(function(sites) {
+  for(var i=0; i < sites.sites.length; i++){
+  
+  var sitesUrl = sites.sites[i].split(".com/");
+      sitesUrl = sitesUrl[1];
+      console.log(sitesUrl)
+
+          var post = {
+            url:sitesUrl
+          }; 
+    
+    var query = con.query('INSERT INTO all_comics_url SET ?', post, function(err, result) {console.log(result); });
+    
+  }
+});
+//con.end();
+
+})
+       
+
 
 
 
@@ -233,6 +267,9 @@ if (!fs.existsSync(_pathURL)){
       }
 
      });
+
+console.log(url)
+
    request(url, function(error, response, html){
      if(!error){
        var $ = cheerio.load(html);
